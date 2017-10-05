@@ -17,4 +17,9 @@
  * along with meteoLCD-Android If not, see <http://www.gnu.org/licenses/>.
  */
 
-include ':app'
+package lu.lcd.meteolcd;
+
+import android.support.v4.app.Fragment;
+
+public class CurrentWeatherFragment extends Fragment {
+}
