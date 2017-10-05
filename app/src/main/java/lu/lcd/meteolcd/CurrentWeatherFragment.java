@@ -19,7 +19,86 @@
 
 package lu.lcd.meteolcd;
 
+import android.content.Context;
+import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.net.Uri;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.telephony.TelephonyManager;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+
+import com.google.firebase.analytics.FirebaseAnalytics;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.JsonHttpResponseHandler;
+
+import org.json.JSONObject;
+
+
+import cz.msebera.android.httpclient.Header;
+
 
 public class CurrentWeatherFragment extends Fragment {
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.current_weather_fragment, parent, false);
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+
+    }
+
+    public boolean isOnline() {
+        ConnectivityManager cm =
+                (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        return netInfo != null && netInfo.isConnectedOrConnecting();
+    }
+
+    public boolean isBadNetwork() {
+        ConnectivityManager cm =
+                (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo info = cm.getActiveNetworkInfo();
+
+        if (!isOnline()) {
+            return true;
+        } else {
+            if (info.getType() == ConnectivityManager.TYPE_WIFI) {
+                return false;
+            } else if (info.getType() == ConnectivityManager.TYPE_MOBILE) {
+                if (info.getSubtype() == TelephonyManager.NETWORK_TYPE_GSM) {
+                    return true;
+                } else if (info.getSubtype() == TelephonyManager.NETWORK_TYPE_GPRS) {
+                    // Bandwidth between 100 kbps and below
+                    return true;
+                } else if (info.getSubtype() == TelephonyManager.NETWORK_TYPE_EDGE) {
+                    // Bandwidth between 50-100 kbps
+                    return true;
+                } else if (info.getSubtype() == TelephonyManager.NETWORK_TYPE_UMTS) {
+                    // Bandwidth between 50-100 kbps
+                    return true;
+                } else if (info.getSubtype() == TelephonyManager.NETWORK_TYPE_HSDPA) {
+                    // Bandwidth between 400-1000 kbps
+                    return false;
+                } else if (info.getSubtype() == TelephonyManager.NETWORK_TYPE_LTE) {
+                    return false;
+                } else if (info.getSubtype() == TelephonyManager.NETWORK_TYPE_HSPAP) {
+                    return false;
+                } else if (info.getSubtype() == TelephonyManager.NETWORK_TYPE_HSUPA) {
+                    return false;
+                } else {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        }
+    }
 }
