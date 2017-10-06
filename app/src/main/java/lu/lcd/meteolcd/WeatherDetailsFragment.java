@@ -120,6 +120,8 @@ public class WeatherDetailsFragment extends Fragment {
             e.printStackTrace();
         }
 
+        weatherDetailList.clear();
+
         JSONArray jsonArray = response.optJSONArray("weather");
         if (jsonArray != null) {
             int len = jsonArray.length();
