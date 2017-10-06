@@ -100,7 +100,8 @@ public class MainActivity extends AppCompatActivity
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.fragmentContent, new GraphsFragment()).commit();
         } else if (id == R.id.nav_news) {
-
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.fragmentContent, new NewsFragment()).commit();
         }
 
         item.setChecked(true);
