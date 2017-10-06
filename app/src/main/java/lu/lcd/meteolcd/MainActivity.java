@@ -94,7 +94,8 @@ public class MainActivity extends AppCompatActivity
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.fragmentContent, new CurrentWeatherFragment()).commit();
         } else if (id == R.id.nav_details) {
-
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.fragmentContent, new WeatherDetailsFragment()).commit();
         } else if (id == R.id.nav_graphs) {
 
         } else if (id == R.id.nav_news) {
