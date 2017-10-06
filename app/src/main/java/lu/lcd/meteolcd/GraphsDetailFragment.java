@@ -170,10 +170,10 @@ public class GraphsDetailFragment extends Fragment {
 
     public void displayGraph() {
         List<Entry> entries = new ArrayList<>();
-        String[] dateEntries = new String[graphDetailsList.size()];
-        String unit = "";
-        int i = 0;
-        for (GraphDetail data : graphDetailsList) {
+        String[] dateEntries = new String[graphDetailsList.size()-2];
+        String unit = " -";
+        for (int i = 0; i < (graphDetailsList.size() - 2); i++) {
+            GraphDetail data = graphDetailsList.get(i);
             // turn your data into Entry objects
             entries.add(new Entry(i, Float.valueOf(data.getValue())));
             dateEntries[i] = data.getDate();
