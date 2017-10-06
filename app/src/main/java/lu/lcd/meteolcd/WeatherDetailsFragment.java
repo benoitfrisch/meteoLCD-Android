@@ -59,6 +59,7 @@ public class WeatherDetailsFragment extends Fragment {
     private Button refreshButton;
     private ProgressBar progressBar;
     private List<WeatherDetail> weatherDetailList = new ArrayList<>();
+    private FirebaseAnalytics mFirebaseAnalytics;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
@@ -71,7 +72,7 @@ public class WeatherDetailsFragment extends Fragment {
         listView = (ListView) getView().findViewById(R.id.listView);
         refreshButton = (Button) getView().findViewById(R.id.refreshButton);
         progressBar.setVisibility(View.VISIBLE);
-
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(getActivity());
         refreshButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -83,6 +84,12 @@ public class WeatherDetailsFragment extends Fragment {
     }
 
     private void getCurrent() {
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "WeatherDetails");
+        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "WeatherDetails");
+        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "weather-details");
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+
         String query = "http://www.lcd.lu/meteo/current_json.php";
         final File current = new File(getContext().getFilesDir(), "current.json");
         if (current.exists() && isBadNetwork()) {

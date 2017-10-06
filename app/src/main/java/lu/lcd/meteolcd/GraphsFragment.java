@@ -34,6 +34,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.FileAsyncHttpResponseHandler;
 
@@ -56,6 +57,7 @@ public class GraphsFragment extends Fragment {
     private Button refreshButton;
     private ProgressBar progressBar;
     private List<Graph> graphList = new ArrayList<>();
+    private FirebaseAnalytics mFirebaseAnalytics;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
@@ -68,7 +70,7 @@ public class GraphsFragment extends Fragment {
         listView = (ListView) getView().findViewById(R.id.listView);
         refreshButton = (Button) getView().findViewById(R.id.refreshButton);
         progressBar.setVisibility(View.VISIBLE);
-
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(getActivity());
         refreshButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -91,6 +93,12 @@ public class GraphsFragment extends Fragment {
     }
 
     private void getCurrent() {
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "Graphs");
+        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "Graph");
+        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "graph");
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+
         String query = "http://www.lcd.lu/meteo/graph_json.php";
         final File current = new File(getContext().getFilesDir(), "graphs.json");
         if (current.exists() && isBadNetwork()) {

@@ -56,6 +56,7 @@ public class CurrentWeatherFragment extends Fragment {
     private TextView lastUpdateLabel;
     private TextView backgroundBox;
     private Button refreshButton;
+    private FirebaseAnalytics mFirebaseAnalytics;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
@@ -77,10 +78,17 @@ public class CurrentWeatherFragment extends Fragment {
                 getCurrentWeather();
             }
         });
+
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(getActivity());
         getCurrentWeather();
     }
 
     private void getCurrentWeather() {
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "CurrentWeather");
+        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "CurrentWeather");
+        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "current-weather");
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
         if (isOnline()) {
             String query = "http://www.lcd.lu/meteo/current_json.php";
             AsyncHttpClient client = new AsyncHttpClient();

@@ -31,12 +31,15 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class NewsFragment extends Fragment {
     private WebView webView;
     private ProgressBar progressBar;
+    private FirebaseAnalytics mFirebaseAnalytics;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
@@ -48,6 +51,12 @@ public class NewsFragment extends Fragment {
         progressBar = (ProgressBar) getView().findViewById(R.id.progress);
         webView = (WebView) getView().findViewById(R.id.webView);
         progressBar.setVisibility(View.VISIBLE);
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(getActivity());
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "News");
+        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "News");
+        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "news");
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
         webView.loadUrl("https://lcd.fresh.lu/getnews.php");
         progressBar.setProgress(webView.getProgress());

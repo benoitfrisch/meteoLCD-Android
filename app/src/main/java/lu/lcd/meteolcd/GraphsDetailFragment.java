@@ -41,6 +41,7 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.FileAsyncHttpResponseHandler;
 
@@ -65,6 +66,8 @@ public class GraphsDetailFragment extends Fragment {
     private Graph graph;
     private LineChart chart;
     private List<GraphDetail> graphDetailsList = new ArrayList<>();
+    private FirebaseAnalytics mFirebaseAnalytics;
+
 
     public Graph getGraph() {
         return graph;
@@ -86,7 +89,7 @@ public class GraphsDetailFragment extends Fragment {
         refreshButton = (Button) getView().findViewById(R.id.refreshButton);
         chart = (LineChart) getView().findViewById(R.id.chart);
         progressBar.setVisibility(View.VISIBLE);
-
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(getActivity());
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -165,12 +168,18 @@ public class GraphsDetailFragment extends Fragment {
             }
         }
 
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "Graph-" + graph.getId());
+        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "Graph-" + graph.getId());
+        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "graph");
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+
         displayGraph();
     }
 
     public void displayGraph() {
         List<Entry> entries = new ArrayList<>();
-        String[] dateEntries = new String[graphDetailsList.size()-2];
+        String[] dateEntries = new String[graphDetailsList.size() - 2];
         String unit = " -";
         for (int i = 0; i < (graphDetailsList.size() - 2); i++) {
             GraphDetail data = graphDetailsList.get(i);
