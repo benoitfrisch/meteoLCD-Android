@@ -60,6 +60,7 @@ import cz.msebera.android.httpclient.Header;
 
 public class GraphsDetailFragment extends Fragment {
     private Button backButton;
+    private Button refreshButton;
     private ProgressBar progressBar;
     private Graph graph;
     private LineChart chart;
@@ -82,6 +83,7 @@ public class GraphsDetailFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         progressBar = (ProgressBar) getView().findViewById(R.id.progress);
         backButton = (Button) getView().findViewById(R.id.backButton);
+        refreshButton = (Button) getView().findViewById(R.id.refreshButton);
         chart = (LineChart) getView().findViewById(R.id.chart);
         progressBar.setVisibility(View.VISIBLE);
 
@@ -90,6 +92,15 @@ public class GraphsDetailFragment extends Fragment {
             public void onClick(View v) {
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                 fragmentManager.beginTransaction().replace(R.id.fragmentContent, new GraphsFragment()).commit();
+            }
+        });
+
+
+        refreshButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                progressBar.setVisibility(View.VISIBLE);
+                getCurrent();
             }
         });
 
@@ -160,18 +171,19 @@ public class GraphsDetailFragment extends Fragment {
     public void displayGraph() {
         List<Entry> entries = new ArrayList<>();
         String[] dateEntries = new String[graphDetailsList.size()];
+        String unit = "";
         int i = 0;
         for (GraphDetail data : graphDetailsList) {
             // turn your data into Entry objects
             entries.add(new Entry(i, Float.valueOf(data.getValue())));
             dateEntries[i] = data.getDate();
+            unit = data.getUnit();
             i++;
         }
 
         LineDataSet dataSet = new LineDataSet(entries, "Value");
         dataSet.setColor(Color.BLUE);
         dataSet.setValueTextColor(Color.GRAY);
-        dataSet.setDrawFilled(false);
         dataSet.setDrawCircles(false);
         dataSet.setFillColor(R.color.colorPrimary);
 
@@ -184,6 +196,7 @@ public class GraphsDetailFragment extends Fragment {
         chart.getAxisRight().setEnabled(false);
         chart.getXAxis().setLabelRotationAngle(270);
         chart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
+        chart.getAxisLeft().setValueFormatter(new GraphValueFormatter(unit));
         chart.getLegend().setEnabled(false);
         chart.invalidate(); // refresh
 
