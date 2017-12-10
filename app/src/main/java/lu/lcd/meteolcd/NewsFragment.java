@@ -58,6 +58,8 @@ public class NewsFragment extends Fragment {
         bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "news");
         mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
+        getActivity().setTitle("News");
+
         webView.loadUrl("https://lcd.fresh.lu/getnews.php");
         progressBar.setProgress(webView.getProgress());
         if (webView.getProgress() == 100) {

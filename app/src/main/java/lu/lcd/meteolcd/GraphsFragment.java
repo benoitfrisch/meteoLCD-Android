@@ -77,6 +77,7 @@ public class GraphsFragment extends Fragment {
                 getCurrent();
             }
         });
+        getActivity().setTitle("Graphs");
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

@@ -81,6 +81,7 @@ public class WeatherDetailsFragment extends Fragment {
         });
 
         getCurrent();
+        getActivity().setTitle("Weather Details");
     }
 
     private void getCurrent() {

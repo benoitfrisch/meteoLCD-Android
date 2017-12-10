@@ -96,6 +96,12 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_details) {
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.fragmentContent, new WeatherDetailsFragment()).commit();
+        } else if (id == R.id.nav_webcam) {
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.fragmentContent, new WebcamFragment()).commit();
+        } else if (id == R.id.nav_lightning) {
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.fragmentContent, new LightningFragment()).commit();
         } else if (id == R.id.nav_graphs) {
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.fragmentContent, new GraphsFragment()).commit();
