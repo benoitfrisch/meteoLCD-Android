@@ -96,8 +96,9 @@ public class CurrentWeatherFragment extends Fragment {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                     currentWeather = new CurrentWeather(response.optString("temperature"), response.optString("icon"), response.optString("pression"), response.optString("lastupdate"));
-                    int backID = getResources().getIdentifier("@drawable/" + currentWeather.getIcon() + "_back", "drawable", getContext().getPackageName());
-                    backgroundImage.setImageResource(backID);
+                    /*int backID = getResources().getIdentifier("@drawable/" + currentWeather.getIcon() + "_back", "drawable", getContext().getPackageName());
+                    backgroundImage.setImageResource(backID);*/
+                    getCurrentImage();
                     int currID = getResources().getIdentifier("@drawable/" + currentWeather.getIcon(), "drawable", getContext().getPackageName());
                     currentImage.setImageResource(currID);
 
@@ -114,6 +115,17 @@ public class CurrentWeatherFragment extends Fragment {
             });
         }
     }
+
+    private void getCurrentImage() {
+        if (isOnline()) {
+            ImageDownloader downloadTask = new ImageDownloader(backgroundImage);
+            downloadTask.execute("http://www.lcd.lu/meteo/current.jpg");
+        } else {
+            int backID = getResources().getIdentifier("@drawable/" + currentWeather.getIcon() + "_back", "drawable", getContext().getPackageName());
+            backgroundImage.setImageResource(backID);
+        }
+    }
+
 
     public boolean isOnline() {
         ConnectivityManager cm =
